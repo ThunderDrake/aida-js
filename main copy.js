@@ -518,6 +518,9 @@ mmApproach.add("(min-width: 800px)", () => {
   });
 
 
+  
+
+
 function pin() {
   ScrollTrigger.create({
     trigger: ".abaut-right-wrapper",
@@ -625,11 +628,31 @@ function navColorBg1() {
 }
 
 function init() {
+  const allTrysy = document.querySelectorAll(".moving-text-wrapp");
+
+  for(let i = 0; i < allTrysy.length; i++){
+    allTrysy[i].classList.add("moving-text-wrapp" + i);
+    if(allTrysy[i].document.querySelector(".we-do-email-item_wrap")){
+      allTrysy[i].document.querySelector(".we-do-email-item_wrap").classList.add("we-do-email-item_wrap" + i);
+    }
+    let e = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".moving-text-wrapp" + i,
+        start: "top bottom",
+        end: "bottom top-=200%",
+        scrub: 1,
+      },
+    });
+    e.to(".we-do-email-item_wrap" + i, { xPercent: -25 });
+  }
+
+
   if(document.querySelector(".awards-media")){
     initAwardsHover();
   }
 
   if(document.querySelector(".moving-text-wrapp")){
+    console.log("трусы1");
     moveLogoEmeil2();
   }
 
@@ -794,6 +817,33 @@ function initAwardsHover() {
 }
 
 let mm = gsap.matchMedia();
+if(document.querySelector(".splide__slide")){
+
+
+mm.add("(min-width: 992px)", () => {
+  cursor1();
+  let e = selectAll(".splide__slide");
+  var t = selectAll(".image img");
+  gsap.set(t, { scale: 1.1, transformOrigin: "center center" }),
+    e.forEach((e) => {
+      var t = e.querySelector(".image img");
+      let r = e.querySelector(".link-tilte"),
+        n = gsap.timeline({ paused: "true", reversed: "true" });
+      n.to(t, { scale: 1, duration: 1.4, ease: "power2.inOut" }),
+        e.addEventListener("mouseenter", () => {
+          n.play(), r.classList.add("animate-in");
+        }),
+        e.addEventListener("mouseleave", () => {
+          n.reverse(),
+            r.classList.add("animate-out"),
+            r.classList.remove("animate-in"),
+            setTimeout(() => {
+              r.classList.remove("animate-out");
+            }, 300);
+        });
+    });
+});
+}
 function initImageParallax() {
   gsap.utils.toArray(".with-parallax").forEach((e) => {
     var t = gsap.utils.toArray(".image-parallax");
@@ -863,17 +913,9 @@ function moveLogoEmeil1() {
   e.to(".we-do-email-item_wrap", { xPercent: -25 });
 }
 
-function moveLogoEmeil2() {
-  let e = gsap.timeline({
-    scrollTrigger: {
-      trigger: ".moving-text-wrapp",
-      start: "top bottom",
-      end: "bottom top-=200%",
-      scrub: 1,
-    },
-  });
-  e.to(".we-do-email-item_wrap", { xPercent: -25 });
-}
+
+
+
 
 
 function moveLogoEmeil() {
